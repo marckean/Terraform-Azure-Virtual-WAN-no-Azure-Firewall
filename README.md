@@ -7,7 +7,7 @@
 
 # Overview
 In this section we have a look at "the what", **what** is deployed using this code in its current state. This is using BHP's asset **Petroleum** as the example asset. 
-![](blobs/Screenshot%202021-07-21%20191501.png)
+<img src="blobs/Screenshot%202021-07-21%20191501.png" width="2000"/>
 ## Deployment Instructions
 This is where you find all the instructions to run this repository in amongst the the other repositories. To begin with, repositories must be run in order and each subsequent repository is dependent on the lower level repository. Once all repositories have been run successfully once and in full, then the repositories can be run again in any order for any changes that are required.
 
@@ -29,8 +29,7 @@ Azure vWAN itself, only one deployed into a subscription named **Connectivity**.
 <img src="blobs/Azure/00753-icon-Virtual Hubs-menu.svg" width="70"/>
 
 A total of 3 virtual hubs are deployed in the same region inside of the one Azure vWAN. Each hub is earmarked to be used for each environment, Prod / Shared Services / Non-Prod.
-
-![](blobs/vWAN%20hubs.png)
+<img src="blobs/vWAN%20hubs.png" width="300"/>
 
 ### Virtual Network Connections
 <img src="blobs/Azure/00750-icon-Virtual Network Connections-menu.svg" width="70"/>
@@ -70,9 +69,14 @@ con-aue-vnt-ss_spoke_01 | 10.1.16.0/21 | con-aue-001<br>con-aue-002 | 10.1.16.0/
 
 # Understanding vWAN routing
 
-- first
-- second
-- third
+Routing in vWAN can get a little complicated... But I've taken snippets from this [video](https://www.microsoft.com/azure/partners/videos/azure-networking-services) (as shown below) to help explain vWAN routing in more detail. 
+
+This covers:
+
+- Connection & Propagation
+- Route Tables
+- Custom Route Tables
+- Putting it all together
 
 
 ## Connection & Propagation
