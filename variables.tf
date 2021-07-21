@@ -153,7 +153,7 @@ variable "spoke_nonprod_virtual_network_01" {
     dns_servers   = list(string)
   })
   default = {
-    vnet_suffix   = "nonprod_spoke_02"
+    vnet_suffix   = "nonprod_spoke_01"
     address_space = ["10.1.8.0/21"]
     dns_servers   = []
   }
@@ -192,7 +192,7 @@ variable "spoke_ss_virtual_network_01" {
     dns_servers   = list(string)
   })
   default = {
-    vnet_suffix   = "ss_spoke_03"
+    vnet_suffix   = "ss_spoke_01"
     address_space = ["10.1.16.0/21"]
     dns_servers   = []
   }

@@ -181,79 +181,136 @@ resource "azurerm_virtual_hub" "vwan_hubs" {
 # Azure Virtual WAN connections
 #-----------------------------------------------------------------
 
-# From Prod Hub - to Production vNet 01
-resource "azurerm_virtual_hub_connection" "prod_spoke_Prod_Virtual_Network_01" {
+# From Production vNet 01 - to Prod Hub
+resource "azurerm_virtual_hub_connection" "prod_spoke_Virtual_Network_01" {
   provider                  = azurerm.connectivity
   name                      = "${var.environment_code}-${var.region_code}-vwanconn-${var.spoke_prod_virtual_network_01.vnet_suffix}"
   virtual_hub_id            = azurerm_virtual_hub.vwan_hubs["prod"].id
   remote_virtual_network_id = azurerm_virtual_network.Prod_Virtual_Network_01.id
+
+  routing {
+    associated_route_table_id   = azurerm_virtual_hub_route_table.prod_vWAN_Route_Table.id # (Optional) The ID of the route table associated with this Virtual Hub connection.
+    propagated_route_table {
+      labels                    = ["Shared", "Default"] # (Optional) The list of labels to assign to this route table.
+      route_table_ids           = [azurerm_virtual_hub_route_table.prod_vWAN_Route_Table.id] # (Optional) A list of Route Table ID's to associated with this Virtual Hub Connection.
+    }
+    /*
+    static_vnet_route {
+      name                      = "" # (Optional) The name which should be used for this Static Route
+      address_prefixes          = [] # (Optional) A list of CIDR Ranges which should be used as Address
+      next_hop_ip_address       = [] # (Optional) The IP Address which should be used for the Next Hop
+    }
+    */
+  }
+  depends_on = [
+    azurerm_virtual_hub_route_table.prod_vWAN_Route_Table
+  ]
 }
 
-# From Non-Prod Hub - to Non-Production vNet 01
-resource "azurerm_virtual_hub_connection" "nonprod_spoke_Prod_Virtual_Network_01" {
+# From Non-Production vNet 01 - to Non-Prod Hub
+resource "azurerm_virtual_hub_connection" "nonprod_spoke_Virtual_Network_01" {
   provider                  = azurerm.connectivity
   name                      = "${var.environment_code}-${var.region_code}-vwanconn-${var.spoke_nonprod_virtual_network_01.vnet_suffix}"
   virtual_hub_id            = azurerm_virtual_hub.vwan_hubs["non_prod"].id
   remote_virtual_network_id = azurerm_virtual_network.NonProd_Virtual_Network_01.id
+
+  routing {
+    associated_route_table_id   = azurerm_virtual_hub_route_table.nonprod_vWAN_Route_Table.id # (Optional) The ID of the route table associated with this Virtual Hub connection.
+    propagated_route_table {
+      labels                    = ["Shared", "Default"] # (Optional) The list of labels to assign to this route table.
+      route_table_ids           = [azurerm_virtual_hub_route_table.nonprod_vWAN_Route_Table.id] # (Optional) A list of Route Table ID's to associated with this Virtual Hub Connection.
+    }
+    /*
+    static_vnet_route {
+      name                      = "" # (Optional) The name which should be used for this Static Route
+      address_prefixes          = [] # (Optional) A list of CIDR Ranges which should be used as Address
+      next_hop_ip_address       = [] # (Optional) The IP Address which should be used for the Next Hop
+    }
+    */
+  }
+  depends_on = [
+    azurerm_virtual_hub_route_table.nonprod_vWAN_Route_Table
+  ]
 }
 
-# From Shared Services Hub - to Shared Services vNet 01
-resource "azurerm_virtual_hub_connection" "ss_spoke_Prod_Virtual_Network_01" {
+# From Shared Services vNet 01 - to Shared Services Hub
+resource "azurerm_virtual_hub_connection" "ss_spoke_Virtual_Network_01" {
   provider                  = azurerm.connectivity
   name                      = "${var.environment_code}-${var.region_code}-vwanconn-${var.spoke_ss_virtual_network_01.vnet_suffix}"
   virtual_hub_id            = azurerm_virtual_hub.vwan_hubs["ss"].id
   remote_virtual_network_id = azurerm_virtual_network.SS_Virtual_Network_01.id
+  
+  routing {
+    associated_route_table_id   = azurerm_virtual_hub_route_table.ss_vWAN_Route_Table.id # (Optional) The ID of the route table associated with this Virtual Hub connection.
+    propagated_route_table {
+      labels                    = ["Default", "Prod", "Non-Prod"] # (Optional) The list of labels to assign to this route table.
+      route_table_ids           = [azurerm_virtual_hub_route_table.ss_vWAN_Route_Table.id] # (Optional) A list of Route Table ID's to associated with this Virtual Hub Connection.
+    }
+    /*
+    static_vnet_route {
+      name                      = "" # (Optional) The name which should be used for this Static Route
+      address_prefixes          = [] # (Optional) A list of CIDR Ranges which should be used as Address
+      next_hop_ip_address       = [] # (Optional) The IP Address which should be used for the Next Hop
+    }
+    */
+  }
+  depends_on = [
+    azurerm_virtual_hub_route_table.ss_vWAN_Route_Table
+  ]
 }
 
 #-----------------------------------------------------------------
 # Azure Virtual WAN Route Table
 #-----------------------------------------------------------------
-# From Prod Hub - to Production vNet 01
+# Prod Hub
 resource "azurerm_virtual_hub_route_table" "prod_vWAN_Route_Table" {
   provider       = azurerm.connectivity
-  name           = "${var.environment_code}-${var.region_code}-vwanrt-${var.spoke_prod_virtual_network_01.vnet_suffix}"
+  name           = "${var.environment_code}-${var.region_code}-vwanrt-${var.virtual_wan["prod"].environment}"
   virtual_hub_id = azurerm_virtual_hub.vwan_hubs["prod"].id
-  labels         = ["prod"]
-
+  labels         = ["Prod"]
+/*
   route {
-    name              = "Prod_01"
-    destinations_type = "CIDR"
-    destinations      = var.spoke_prod_virtual_network_01.address_space
-    next_hop_type     = "ResourceId"
-    next_hop          = azurerm_virtual_hub_connection.prod_spoke_Prod_Virtual_Network_01.id
+    name              = "Shared_Services_01"
+    destinations_type = "CIDR" # (Required) The type of destinations. Possible values are CIDR, ResourceId and Service
+    destinations      = var.spoke_ss_virtual_network_01.address_space # (Required) A list of destination addresses for this route.
+    next_hop_type     = "ResourceId" # (Optional) The type of next hop. Currently the only possible value is ResourceId. Defaults to ResourceId
+    next_hop          = azurerm_virtual_hub_connection.ss_spoke_Virtual_Network_01.id # (Required) The next hop's resource ID
   }
+  */
 }
 
-# From Non-Prod Hub - to Non-Production vNet 01
+# Non-Prod Hub
 resource "azurerm_virtual_hub_route_table" "nonprod_vWAN_Route_Table" {
   provider       = azurerm.connectivity
-  name           = "${var.environment_code}-${var.region_code}-vwanrt-${var.spoke_nonprod_virtual_network_01.vnet_suffix}"
+  name           = "${var.environment_code}-${var.region_code}-vwanrt-${var.virtual_wan["non_prod"].environment}"
   virtual_hub_id = azurerm_virtual_hub.vwan_hubs["non_prod"].id
-  labels         = ["ss"]
-
+  labels         = ["Non-Prod"]
+/*
   route {
-    name              = "Non-Prod_01"
+    name              = "Shared_Services_01"
     destinations_type = "CIDR"
-    destinations      = var.spoke_nonprod_virtual_network_01.address_space
+    destinations      = var.spoke_ss_virtual_network_01.address_space
     next_hop_type     = "ResourceId"
-    next_hop          = azurerm_virtual_hub_connection.nonprod_spoke_Prod_Virtual_Network_01.id
+    next_hop          = azurerm_virtual_hub_connection.ss_spoke_Virtual_Network_01.id
   }
+  */
 }
 
-# From Shared Services Hub - to Shared Services vNet 01
+# Shared Services Hub
 resource "azurerm_virtual_hub_route_table" "ss_vWAN_Route_Table" {
   provider       = azurerm.connectivity
-  name           = "${var.environment_code}-${var.region_code}-vwanrt-${var.spoke_ss_virtual_network_01.vnet_suffix}"
+  name           = "${var.environment_code}-${var.region_code}-vwanrt-${var.virtual_wan["ss"].environment}"
   virtual_hub_id = azurerm_virtual_hub.vwan_hubs["ss"].id
-  labels         = ["non-prod"]
-
+  labels         = ["Shared"]
+/*
   route {
     name              = "SS_01"
     destinations_type = "CIDR"
     destinations      = var.spoke_ss_virtual_network_01.address_space
     next_hop_type     = "ResourceId"
-    next_hop          = azurerm_virtual_hub_connection.ss_spoke_Prod_Virtual_Network_01.id
+    next_hop          = azurerm_virtual_hub_connection.ss_spoke_Virtual_Network_01.id
   }
+  */
 }
 
 #-----------------------------------------------------------------
