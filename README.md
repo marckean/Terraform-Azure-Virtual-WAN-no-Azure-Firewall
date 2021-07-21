@@ -14,10 +14,13 @@ This is where you find all the instructions to run this repository in amongst th
 
 Before you deploy:
 
-- Read "the how", the deployment manual found [here](https://bhptechsi.atlassian.net/wiki/spaces/CLOUD/pages/2212462775/OT+Landing+Zone+-+IaC+handbook+the+how)
-- Follow the [prerequisites](https://bhptechsi.atlassian.net/wiki/spaces/CLOUD/pages/2212462775/OT+Landing+Zone+-+IaC+handbook+the+how#Prerequisites)
-- Change the [Azure Region](https://bhptechsi.atlassian.net/wiki/spaces/CLOUD/pages/2212462775/OT+Landing+Zone+-+IaC+handbook+the+how#Region) if needed
-- Change the details (including asset name) of the top-level [Management Group](https://bhptechsi.atlassian.net/wiki/spaces/CLOUD/pages/2212462775/OT+Landing+Zone+-+IaC+handbook+the+how#Management-Group-Details)
+https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurestorage
+
+Cloud Shell automatically has the latest version of Terraform installed. Also, Terraform automatically uses information from the current Azure subscription. As a result, there's no installation or configuration required
+
+[Persist files in Azure Cloud Shell](https://docs.microsoft.com/en-us/azure/cloud-shell/persisting-shell-storage)
+
+
 
 ## Deployed Items
 The below is "the what", **what** is deployed with this repository.  
@@ -81,9 +84,38 @@ This covers:
 
 
 ## Connection & Propagation
+### Connections
+- Anything that is connected to a VirtualHub​
+  - Vnets - HubVnetConnection​
+  - VPN GW - VPNConnection​
+  - ER GW - ERConnection​
+  - P2S GW – P2S config Connection​
+- Can have static routes, directing traffic for a tiered spoke through an NVA​
+
+### Propagation
+- Inserts route information from Connections into Route Table​
+- Connections can Propagate to multiple RT’s​
+- Connections must Propagate to RT’s in all Hubs (or use Labels) for inter-hub connectivity​
+
+### Association​
+- Programs route information from Route Tables into Connections​
+- Determines next hop for traffic from VNET or Branch to destination -> controls flow of traffic​
+- Each Connection Associates with one Route Table​
+
 [![Alt text](https://img.youtube.com/vi/reuK7XIHuog/0.jpg)](https://www.youtube.com/watch?v=reuK7XIHuog)
 
 ## Route Tables
+- Collection of routes in each Hub
+- Each Hub may contain multiple Route Tables​
+- Each Hub always contains Default and None​
+- Route Tables across Hubs can be grouped under Labels​
+- Routes: Destination prefix -> Next Hop, example 10.0.1.0/24 ->  VNET_A_1_conn​
+
+### Routes​
+- Destination: CIDR prefix e.g. 10.0.1.0/24​
+- Next Hop: Connection, AzFW, Remote Hub​
+### Labels​
+- Collections of Route Tables across Hubs​
 
 [![Alt text](https://img.youtube.com/vi/MExWr_kEa_0/0.jpg)](https://www.youtube.com/watch?v=MExWr_kEa_0)
 
