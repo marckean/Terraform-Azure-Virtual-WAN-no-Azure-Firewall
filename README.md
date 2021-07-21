@@ -1,8 +1,6 @@
 # Terraform-Azure-Virtual-WAN-no-Azure-Firewall
 
 
-
-
 <img src="blobs/AzureLogo2021.png" width="100" align="right"/>
 
 # Overview
@@ -35,12 +33,13 @@ Azure vWAN itself, only one deployed into a subscription named **Connectivity**.
 <img src="blobs/Azure/00753-icon-Virtual Hubs-menu.svg" width="70"/>
 
 A total of 3 virtual hubs are deployed in the same region inside of the one Azure vWAN. Each hub is earmarked to be used for each environment, Prod / Shared Services / Non-Prod.
+
 <img src="blobs/vWAN%20hubs.png" width="300"/>
 
 ### Virtual Network Connections
 <img src="blobs/Azure/00750-icon-Virtual Network Connections-menu.svg" width="70"/>
 
-This is fairly stock standard, spoke vNets in each environment Prod / Shared Services / Non-Prod connected to the relevant vWAN hub. 
+This is fairly stock standard, spoke vNets in each environment Prod / Shared Services / Non-Prod connected to the relevant vWAN hub.
 
 
 
