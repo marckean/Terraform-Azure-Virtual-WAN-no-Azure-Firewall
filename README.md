@@ -76,33 +76,16 @@ con-aue-vnt-ss_spoke_01 | 10.1.16.0/21 | con-aue-001<br>con-aue-002 | 10.1.16.0/
 
 
 ## Connection & Propagation
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/reuK7XIHuog" 
-frameborder="0" 
-allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-allowfullscreen>
-</iframe>
+[![Alt text](https://img.youtube.com/vi/reuK7XIHuog/0.jpg)](https://www.youtube.com/watch?v=reuK7XIHuog)
 
 ## Route Tables
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/MExWr_kEa_0" 
-frameborder="0" 
-allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-allowfullscreen>
-</iframe>
+
+[![Alt text](https://img.youtube.com/vi/MExWr_kEa_0/0.jpg)](https://www.youtube.com/watch?v=MExWr_kEa_0)
 
 ## Custom Route Tables
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/nEt79WbRCoY" 
-frameborder="0" 
-allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-allowfullscreen>
-</iframe>
+
+[![Alt text](https://img.youtube.com/vi/nEt79WbRCoY/0.jpg)](https://www.youtube.com/watch?v=nEt79WbRCoY)
 
 ## Putting it all together
-<iframe width="560" height="315"
-src="https://www.youtube.com/embed/vRW9piJwzHM" 
-frameborder="0" 
-allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
-allowfullscreen>
-</iframe>
+
+[![Alt text](https://img.youtube.com/vi/vRW9piJwzHM/0.jpg)](https://www.youtube.com/watch?v=vRW9piJwzHM)
