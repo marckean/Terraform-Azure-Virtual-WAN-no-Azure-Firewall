@@ -32,7 +32,7 @@ In VS Code, hit **F1** or **CTRL+SHIFT+P**, then **Sign in to Azure**.
 
 ![](blobs/Screenshot%202021-07-22%20104240.png)
 
-In VS Code, hit **F1** again, then **open Bash in Cloud Shell**. 
+In VS Code, hit **F1** or **CTRL+SHIFT+P** again, then **open Bash in Cloud Shell**. 
 
 ![](blobs/Screenshot%202021-07-22%20094811.png)
 
