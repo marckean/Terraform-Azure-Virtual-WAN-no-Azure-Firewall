@@ -6,6 +6,8 @@
 # Overview
 Multi-environment (Prod / Non-Prod / Shared Services) using Azure Virtual WAN, with 3 vWAN hubs in the same region to provide total isolation of the network. This focuses on the Azure side of things, as a second step to this, you would connect to this from on-prem using either ExpressRoute or VPN.
 
+Pretty much the requirement here is that **Prod** can talk to **Shared Services**, **Non-Prod** can talk to **Shared Services**, but **Prod** & **Non-Prod** can't talk to each other. There is total isolation between **Prod** & **Non-Prod**. 
+
 <img src="blobs/Screenshot%202021-07-21%20191501.png" width="2000"/>
 
 ## Deployment Instructions
