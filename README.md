@@ -9,13 +9,15 @@ In this section we have a look at "the what", **what** is deployed using this co
 <img src="blobs/Screenshot%202021-07-21%20191501.png" width="2000"/>
 
 ## Deployment Instructions
-Note, in the real world for large enterprise companies, you would already have access to Terraform Cloud and also have a CI/CD setup, so I assume you already know how this works, you take these Terraform files in this repo and build on top of these, do what you will. 
+> [!NOTE]
+> In the real world for large enterprise companies, you would most likely already have access to **Terraform Cloud** and also have a CI/CD setup. So I assume you already know how Terraform works with respect to deployment. In this instance, you take these Terraform files from this repo and build on top of these, do what you will.
 
 Else, as a quick start, you can run this as a test, in a non-prod/dev environment to have a play and see how/what deploys into Azure. 
 
-Below the instructions to quickly run the Terraform in this repository with the least amount of effort. Easiest way to do this is using **CloudDrive** from within Azure Cloud Shell. The CloudDrive is literally just an Azure Files share in your Azure subscription which saves state and in which you can host files. In this instance, you can host Terraform files form this repo.
+Below the instructions to quickly run the Terraform in this repository with the least amount of effort. Easiest way to do this is using **CloudDrive** from within **Azure Cloud Shell**. The CloudDrive is literally just an Azure Files share in your Azure subscription which saves state and in which you can host files. In this instance, you can host Terraform files form this repo.
 
-[Cloud Shell automatically has the latest version of Terraform installed](https://docs.microsoft.com/en-us/azure/developer/terraform/get-started-cloud-shell). Also, Terraform automatically uses information from the current Azure subscription. As a result, there's no installation or configuration required. 
+> [!NOTE]
+> [Cloud Shell automatically has the latest version of Terraform installed](https://docs.microsoft.com/en-us/azure/developer/terraform/get-started-cloud-shell). Also, Terraform automatically uses information from the current Azure subscription. As a result, there's no installation or configuration required. 
 
 ### VS Code
 Download and Install [Visual Studio Code](https://code.visualstudio.com/download)
@@ -24,7 +26,7 @@ Install the **Azure Account** extension
 
 ![](blobs/Screenshot%202021-07-22%20095015.png)
 
-In VS Code, hit **F1**, then **Sign in to Azure**. 
+In VS Code, hit **F1** or **CTRL+SHIFT+P**, then **Sign in to Azure**. 
 
 ![](blobs/Screenshot%202021-07-22%20104240.png)
 
@@ -33,7 +35,7 @@ In VS Code, hit **F1** again, then **open Bash in Cloud Shell**.
 ![](blobs/Screenshot%202021-07-22%20094811.png)
 
 ### List clouddrive
-Next, you need to connect to the Azure Files share in which CloudDrive is configured to use, so you can copy and paste the Terraform files in this repo. [To see which Azure Files share CloudDrive is using](https://docs.microsoft.com/en-us/azure/cloud-shell/persisting-shell-storage#list-clouddrive), run the `df` command.
+Assuming you have previously connected to Cloud Shell before and already setup the Storage Account [more details here](https://docs.microsoft.com/en-us/azure/cloud-shell/persisting-shell-storage) Next, you will need to connect to the Azure Files share in which CloudDrive is configured to use, so you can copy and paste the Terraform files in this repo. [To see which Azure Files share CloudDrive is using](https://docs.microsoft.com/en-us/azure/cloud-shell/persisting-shell-storage#list-clouddrive), run the `df` command.
 
 ```
 justin@Azure:~$ df
