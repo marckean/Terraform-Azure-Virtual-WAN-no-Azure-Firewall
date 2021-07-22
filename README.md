@@ -4,7 +4,7 @@
 <img src="blobs/AzureLogo2021.png" width="100" align="right"/>
 
 # Overview
-In this section we have a look at "the what", **what** is deployed using this code in its current state. 
+Multi-environment (Prod / Non-Prod / Shared Services) using Azure Virtual WAN, with 3 vWAN hubs in the same region to provide total isolation of the network. This focuses on the Azure side of things, as a second step to this, you would connect to this from on-prem using either ExpressRoute or VPN.
 
 <img src="blobs/Screenshot%202021-07-21%20191501.png" width="2000"/>
 
