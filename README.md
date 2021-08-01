@@ -82,6 +82,26 @@ If it's easier, you can also fork this repo so that the files local to your mach
 Either open the folder directly from the SMB mapped network drive, or you can use the VS Code Azure Storage extension and connect directly to the Azure Files share from within VS Code. 
 
 ![](blobs/Screenshot%202021-08-01%20214841.png)
+## Terraform State
+The state for Terraform should live in a stateful place which is central, common, secure and accessible to everything. E.g. Azure Storage is a perfect candidate. You'll need to setup an Azure Storage account with a container. Recommendation would be to apply Azure resource locking on this storage account so that it doesn't get deleted accidentally. Also, maybe apply some tags to this storage account, clearly specifying what it's used for. Edit the **`terraform.tf`** and change the values for **`backend "azurerm"`** to suit your own Azure Storage Account. **`key = "prod.terraform.tfstate"`** the same. 
+
+You can keep **`key = "prod.terraform.tfstate"`** as is, no change.
+``` json
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = ">= 2.68.0" # was 2.46.1
+    }
+  }
+  backend "azurerm" {
+    resource_group_name  = "TerraformState_CloudShell"
+    storage_account_name = "tfstatecloudshell2021"
+    container_name       = "tfstate"
+    key                  = "prod.terraform.tfstate"
+  }
+}
+```
 ## Azure Storage Key
 While the **`terraform.tf`** file has all the other information for the Azure Storage account, one piece is missing, this is the Azure Storage account **key**. This is sensitive! So we use the Azure CLI **environment variables** to help us. 
 ### Azure CLI configuration
@@ -103,26 +123,6 @@ export ARM_ACCESS_KEY=$ACCOUNT_KEY
 Using the **access_key** environment variable in the Azure CLI prevents you from storing the Azure Storage account key on disk, as per:
 
 ![](blobs/Screenshot%202021-08-01%20191743.png)
-## Terraform State
-The state for Terraform should live in a stateful place which is central, common, secure and accessible to everything. E.g. Azure Storage is a perfect candidate. You'll need to setup an Azure Storage account with a container. Recommendation would be to apply Azure resource locking on this storage account so that it doesn't get deleted accidentally. Also, maybe apply some tags to this storage account, clearly specifying what it's used for. Edit the **`terraform.tf`** and change the values for **`backend "azurerm"`** to suit your own Azure Storage Account. **`key = "prod.terraform.tfstate"`** the same. 
-
-You can keep **`key = "prod.terraform.tfstate"`** as is, no change.
-``` json
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = ">= 2.68.0" # was 2.46.1
-    }
-  }
-  backend "azurerm" {
-    resource_group_name  = "TerraformState_CloudShell"
-    storage_account_name = "tfstatecloudshell2021"
-    container_name       = "tfstate"
-    key                  = "prod.terraform.tfstate"
-  }
-}
-```
 ## Variables to change for your deployment
 In the **`variables.tf`** file, there's a list of variables to change to suit your own environment. Make sure you run through this thoroughly and make the necessary changes. It should be fairly obvious which variables you need to change. For starters, one that you definitely would want to change is the Azure Subscription ID:
 
