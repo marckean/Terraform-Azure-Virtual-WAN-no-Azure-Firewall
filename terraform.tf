@@ -8,6 +8,12 @@ terraform {
       version = ">= 2.68.0" # was 2.46.1
     }
   }
+  backend "azurerm" {
+    resource_group_name  = "TerraformState_CloudShell"
+    storage_account_name = "tfstatecloudshell2021"
+    container_name       = "tfstate"
+    key                  = "prod.terraform.tfstate"
+  }
 }
 
 provider "azurerm" {

@@ -10,63 +10,45 @@ Pretty much the requirement here is that **Prod** can talk to **Shared Services*
 
 <img src="blobs/Screenshot%202021-07-21%20191501.png" width="2000"/>
 
-## Deployment Instructions
+# Deployment Instructions
 > [!NOTE]
 > In the real world for large enterprise companies, you would most likely already have access to **Terraform Cloud** and also have a CI/CD setup. So I assume you already know how Terraform works with respect to deployment. In this instance, you take these Terraform files from this repo and build on top of these, do what you will.
 
 Else, as a quick start, you can run this as a test, in a non-prod/dev environment to have a play and see how/what deploys into Azure. 
 
-Below the instructions to quickly run the Terraform in this repository with the least amount of effort. Easiest way to do this is using **CloudDrive** from within **Azure Cloud Shell**. The CloudDrive is literally just an Azure Files share in your Azure subscription which saves state and in which you can host files. In this instance, you can host Terraform files form this repo.
+Below the instructions to quickly run the Terraform in this repository with the least amount of effort. We will be using GitHub in this example, however you can use any other type of Git that you or your team are familiar with.
 
 > [!NOTE]
 > [Cloud Shell automatically has the latest version of Terraform installed](https://docs.microsoft.com/en-us/azure/developer/terraform/get-started-cloud-shell). Also, Terraform automatically uses information from the current Azure subscription. As a result, there's no installation or configuration required. 
 
-### VS Code
-Download and Install [Visual Studio Code](https://code.visualstudio.com/download)
+## Fork this repo
+Fork this repo then clone locally to your machine.
 
-Install the **Azure Account** extension
+![](blobs/Screenshot%202021-08-01%20170439.png)
 
-![](blobs/Screenshot%202021-07-22%20095015.png)
+Open the folder in VS Code.
+## VS Code
+Download and Install [Visual Studio Code](https://code.visualstudio.com/download) - if you don't have it already installed. 
+### Extentions to install with VS code
+| Extension Name | Description |
+|--------|--------|
+ | [Azure Tools](https://marketplace.visualstudio.com/items?itemName=ms-vscode.vscode-node-azure-pack) | Microsoft Azure support for Visual Studio Code is provided through a rich set of extensions that make it easy to discover and interact with the cloud services that power your applications. <br><br> This includes Azure CLI <br><br> Installing the **Azure Tools** extension installs all of the extensions you need. Some of these extensions will also install the Azure Account extension which provides a single Azure login and subscription filtering experience |
+ | [HashiCorp Terraform](https://marketplace.visualstudio.com/items?itemName=HashiCorp.terraform) | The HashiCorp Terraform Visual Studio Code (VS Code) extension adds syntax highlighting and other editing features for Terraform files using the Terraform Language Server. |
+ 
+ ## Variables to change for your deployment
+In the **variables.tf** file, there's a list of variables to change to suit your own environment. Make sure you run through this thoroughly and make the necessary changes. It should be fairly obvious which variables you need to change. For starters, one that you definitely would want to change is the Azure Subscription ID:
 
-In VS Code, hit **F1** or **CTRL+SHIFT+P**, then **Sign in to Azure**. 
-
-![](blobs/Screenshot%202021-07-22%20104240.png)
-
-In VS Code, hit **F1** or **CTRL+SHIFT+P** again, then **open Bash in Cloud Shell**. 
-
-![](blobs/Screenshot%202021-07-22%20094811.png)
-
-### List clouddrive
-Assuming you have previously connected to Cloud Shell before and already setup the Storage Account [more details here](https://docs.microsoft.com/en-us/azure/cloud-shell/persisting-shell-storage) Next, you will need to connect to the Azure Files share in which CloudDrive is configured to use, so you can copy and paste the Terraform files in this repo. [To see which Azure Files share CloudDrive is using](https://docs.microsoft.com/en-us/azure/cloud-shell/persisting-shell-storage#list-clouddrive), run the `df` command.
-
-```
-justin@Azure:~$ df
-Filesystem                                          1K-blocks   Used  Available Use% Mounted on
-overlay                                             29711408 5577940   24117084  19% /
-tmpfs                                                 986716       0     986716   0% /dev
-tmpfs                                                 986716       0     986716   0% /sys/fs/cgroup
-/dev/sda1                                           29711408 5577940   24117084  19% /etc/hosts
-shm                                                    65536       0      65536   0% /dev/shm
-//mystoragename.file.core.windows.net/fileshareName 5368709120    64 5368709056   1% /home/justin/clouddrive
-justin@Azure:~$
-```
-In this instance, the storage account is **mystoragename** and the Azure Files Share is **fileshareName**.
-### Mount SMB Azure file share
-Next thing you need to do is mount the Azure Files Share on your local device, Windows, Linux, macOS - [https://docs.microsoft.com/en-us/azure/storage/files/storage-how-to-use-files-windows](https://docs.microsoft.com/en-us/azure/storage/files/storage-how-to-use-files-windows)
-
-Once the Azure Files share is mounted, simply create a folder in the root of the drive and copy the files in this repo to it.
-
-### Variables to change
-In the **variables.tf** file, there's a list of variables to change to suit your own environment. Make sure you run through this and make the necessary changes. It should be fairly obvious which variables you need to change. For starters, one that you definitely would want to change is the Azure Subscription ID
-
-```
+``` json
 variable "connectivity_subscription_id" {
   type    = string
   default = "6bx002x5-54x6-4xb1-9xca-5bxefx18x0bx"
 }
 ```
+> [!NOTE]
+> For testing purposes, after changing the subscription ID, if you leave every other variable in tack, this will deploy with the current values 
 
-We are using provider alias's throughout, this gives us the flexibility to deploy across multiple subscriptions on a resource by resouce basis. This means that on a per resource basis you'll see this line included `provider            = azurerm.connectivity` for every resource, here we're specifying which Azure subscription to use.
+### Provider Alias
+We are using provider alias's throughout, this gives us the flexibility to deploy across multiple subscriptions on a resource by resource basis. This means that on a per resource basis you'll see this line included `provider = azurerm.connectivity` for every resource, here we're specifying which Azure subscription to use.
 
 If you want to deploy any resources to other subscriptions, e.g. the spoke Virtual Networks, you can. 
 
@@ -77,20 +59,80 @@ Simply create another provider in the **terraform.tf** file, similar to:
 Also create another variable in the **variables.tf** file similar to:
 
 ![](blobs/Screenshot%202021-07-22%20111659.png)
-### Terraform Commands in Cloud Shell
-In Cloud Shell, run `cd CloudDrive` - at this point, you're at the same location as what you see in the Azure Files Share that has been mounted.
 
-Run `ls` to view the contents of the folder. 
+## Sign In to Azure
 
-Run `cd FolderName` to change to the folder name containing the Terraform Files to which you created just before
+To sign in to your Azure Account, in VS Code, hit **F1** or **CTRL+SHIFT+P**, then type in **Sign in to Azure**.
 
-Run `Terraform Init` to first initialise the folder to be used with Terraform
+![](blobs/Screenshot%202021-07-22%20104240.png)
 
-Option: Run `Terraform Validate` to validate the code. (if you just copied files directly fro this repo, then no errors should appear)
+>[!NOTE]
+>This will be the account used in which Terraform will deploy resources into Azure with.
+>
+> You may be prompted for access to your computer's secure credential storage service (e.g. Keychain Access on MacOS or Windows Credential Manager) so you don't need to sign in every time you start VS Code.
 
-Run `Terraform plan` to see what will be deployed
+## Open Azure Cloud Shell
+In VS Code, hit **F1** or **CTRL+SHIFT+P** again, then **open Bash in Cloud Shell**.
 
-Run `Terraform apply -auto-approve` to apply the configuration directly to Azure.
+![](blobs/Screenshot%202021-07-22%20094811.png)
+
+## Terraform State
+The state for Terraform should live in a stateful place which is central, common, secure and accessible to everything. E.g. Azure Storage is a perfect candidate. You'll need to setup an Azure Storage account with a container. Recommendation would be to apply Azure resource locking on this storage account so that it doesn't get deleted accidentally. Also, maybe apply some tags to this storage account, clearly specifying what it's used for. Edit the **`terraform.tf`** and change the values for **`backend "azurerm"`** to suit your own Azure Storage Account. **`key = "prod.terraform.tfstate"`** the same. 
+
+You can keep **`key = "prod.terraform.tfstate"`** as is, no change.
+``` json
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = ">= 2.68.0" # was 2.46.1
+    }
+  }
+  backend "azurerm" {
+    resource_group_name  = "TerraformState_CloudShell"
+    storage_account_name = "tfstatecloudshell2021"
+    container_name       = "tfstate"
+    key                  = "prod.terraform.tfstate"
+  }
+}
+```
+## Azure Storage Key
+While the **`terraform.tf`** file has all the other information for the Azure Storage account, one piece is missing, this is the Azure Storage account **key**. This is sensitive! So we use the Azure CLI **environment variables** to help us. 
+### Azure CLI configuration
+The Azure CLI allows for **user configuration** for settings such as logging, data collection, and default argument values. The CLI offers a convenience command for managing some defaults, **az config**. Other values can be set in a configuration file or with [environment variables](https://docs.microsoft.com/en-us/cli/azure/azure-cli-configuration#cli-configuration-values-and-environment-variables).
+
+**Terraform** needs the **Azure Storage account key** in order to read/write the **Terraform state file**. In order to not store the Azure storage account key to disk, we will make use of the Azure CLI environment variable [access_key](https://docs.microsoft.com/en-us/cli/azure/azure-cli-configuration#cli-configuration-values-and-environment-variables).
+
+### Environment Variable
+| Name | Type | Description |
+|--------|--------|--------|
+| **access_key** | String | The default access key to use for az batch commands. Only used with aad authorization
+
+Run the following 2 lines. This will grab the Azure Storage account key and apply it's value to the **access_key** environment variable in the Azure CLI:
+
+``` bash
+ACCOUNT_KEY=$(az storage account keys list --resource-group $RESOURCE_GROUP_NAME --account-name $STORAGE_ACCOUNT_NAME --query '[0].value' -o tsv)
+export ARM_ACCESS_KEY=$ACCOUNT_KEY
+```
+Using the **access_key** environment variable in the Azure CLI prevents you from storing the Azure Storage account key on disk, as per:
+
+![](blobs/Screenshot%202021-08-01%20191743.png)
+
+Now you're done and ready to deploy.
+## Terraform deployment commands in in Azure CLI
+In the Azure CLI, run **`cd CloudDrive`** - at this point, you're at the same location as what you see in the Azure Files Share that has been mounted.
+
+Run **`ls`** to view the contents of the folder. 
+
+Run **`cd FolderName`** to change to the folder name containing the Terraform Files to which you created just before
+
+Run **`Terraform Init`** to first initialise the folder to be used with Terraform
+
+Option: Run **`Terraform Validate`** to validate the code. (if you just copied files directly fro this repo, then no errors should appear)
+
+Run **`Terraform plan`** to see what will be deployed
+
+Run **`Terraform apply -auto-approve`** to apply the configuration directly to Azure.
 
 ## Deployed Items
 The below is "the what", **what** is deployed with this repository.  
