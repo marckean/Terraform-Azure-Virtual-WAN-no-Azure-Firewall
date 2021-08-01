@@ -135,11 +135,11 @@ We are using provider alias's throughout, this gives us the flexibility to deplo
 
 If you want to deploy any resources to other subscriptions, e.g. the spoke Virtual Networks, you can. 
 
-Simply create another provider in the **terraform.tf** file, similar to:
+Simply create another provider in the **`terraform.tf`** file, similar to:
 
 ![](blobs/Screenshot%202021-07-22%20111622.png)
 
-Also create another variable in the **variables.tf** file similar to:
+Also create another variable in the **`variables.tf`** file similar to:
 
 ![](blobs/Screenshot%202021-07-22%20111659.png)
 
