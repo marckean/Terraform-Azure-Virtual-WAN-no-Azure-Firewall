@@ -147,17 +147,32 @@ Now you're done and ready to deploy.
 ## Terraform deployment commands in in Azure CLI
 In the Azure CLI, run **`cd CloudDrive`** - at this point, you're at the same location as what you see in the Azure Files Share that has been mounted.
 
-Run **`ls`** to view the contents of the folder. 
+- Run **`ls`** to view the contents of the folder. 
 
-Run **`cd FolderName`** to change to the folder name containing the Terraform Files to which you created just before
+- Run **`cd FolderName`** to change to the folder name containing the Terraform Files to which you created just before
 
-Run **`Terraform Init`** to first initialise the folder to be used with Terraform
+- Run **`Terraform Init`** to first initialise the folder to be used with Terraform
 
-Option: Run **`Terraform Validate`** to validate the code. (if you just copied files directly fro this repo, then no errors should appear)
+When running **`Terraform Init`**, the Azure Storage key is consumed by Terraform. You can see the key file here.
 
-Run **`Terraform plan`** to see what will be deployed
+![](blobs/Screenshot%202021-08-01%20215459.png)
 
-Run **`Terraform apply -auto-approve`** to apply the configuration directly to Azure.
+The file contents looks like:
+``` json
+> {
+  "version": 4,
+  "terraform_version": "1.0.2",
+  "serial": 0,
+  "lineage": "c2c4d0cb-b98f-4683-82cd-6f919faf26d8",
+  "outputs": {},
+  "resources": []
+}
+```
+- Option: Run **`Terraform Validate`** to validate the code. (if you just copied files directly fro this repo, then no errors should appear)
+
+- Run **`Terraform plan`** to see what will be deployed
+
+- Run **`Terraform apply -auto-approve`** to apply the configuration directly to Azure.
 
 ## Deployed Items
 The below is "the what", **what** is deployed with this repository.  
