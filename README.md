@@ -21,7 +21,7 @@ Below the instructions to quickly run the Terraform in this repository with the 
 > [!NOTE]
 > [Cloud Shell automatically has the latest version of Terraform installed](https://docs.microsoft.com/en-us/azure/developer/terraform/get-started-cloud-shell). Also, Terraform automatically uses information from the current Azure subscription. As a result, there's no installation or configuration required. 
 
-1.  Connect to CloudDrive
+1.  Connect to **CloudDrive** (Azure Files Share)
 2.  Copy files from this reop to Azure CloudDrive
 3.  Setup the **Terraform State** in Azure Blob Storage
 4.  Apply the Azure Storage Account key securely to an environment variable
@@ -51,7 +51,7 @@ In VS Code, hit **F1** or **CTRL+SHIFT+P** again, then **open Bash in Cloud Shel
 ![](blobs/Screenshot%202021-07-22%20094811.png)
 
 ## List CloudDrive
-Copy files from the GitHub repo, to Azure CloudDrive, so you can access them using Azure CLI.
+Copy files from the GitHub repo, to Azure CloudDrive, so you can access them using Azure CLI. **Azure CloudDrive** is simply an **Azure Files Share**. 
 
 Assuming you have previously connected to **Azure Cloud Shell** before and already setup the Storage Account [more details here](https://docs.microsoft.com/en-us/azure/cloud-shell/persisting-shell-storage). Next, you will need to connect to the Azure Files share in which CloudDrive is configured to use, so you can copy and paste the Terraform files in this repo. [To see which Azure Files share CloudDrive is using](https://docs.microsoft.com/en-us/azure/cloud-shell/persisting-shell-storage#list-clouddrive), run the `df` command.
 
@@ -66,36 +66,22 @@ shm                                                    65536       0      65536 
 //mystoragename.file.core.windows.net/fileshareName 5368709120    64 5368709056   1% /home/justin/clouddrive
 justin@Azure:~$
 ```
+
+There is it: **`//mystoragename.file.core.windows.net/fileshareName`**
+
 In this instance, the storage account is **mystoragename** and the Azure Files Share is **fileshareName**.
-## Mount SMB Azure file share, and copy the repo files to it
-Next thing you need to do is mount the Azure Files Share on your local device, Windows, Linux, macOS - [https://docs.microsoft.com/en-us/azure/storage/files/storage-how-to-use-files-windows](https://docs.microsoft.com/en-us/azure/storage/files/storage-how-to-use-files-windows)
+## Copy the repo files to the CloudDrive
+Next, you can either use [Azure Storage Explorer](https://azure.microsoft.com/en-au/features/storage-explorer/) to copy the files to CloudDrive. 
 
-Once the Azure Files share is mounted, simply create a folder in the root of the drive and copy the files in this repo to **Azure CloudDrive**. If it's easier, fork this repo so that the files local to your machine. 
+Or you can Mount SMB Azure file share you need to do is mount the Azure Files Share on your local device, Windows, Linux, macOS - [https://docs.microsoft.com/en-us/azure/storage/files/storage-how-to-use-files-windows](https://docs.microsoft.com/en-us/azure/storage/files/storage-how-to-use-files-windows). 
 
+Simply create a folder in the root of **Azure CloudDrive** and copy the files this repo to it. 
+
+If it's easier, you can also fork this repo so that the files local to your machine. 
 ## Open Azure CloudDrive in VS Code
-Either open the folder directly from the SMB mapped network drive, or you can use the Azure Storage extension and connect directly to the Azure Files share from within VS Code. 
+Either open the folder directly from the SMB mapped network drive, or you can use the VS Code Azure Storage extension and connect directly to the Azure Files share from within VS Code. 
 
 ![](blobs/Screenshot%202021-08-01%20214841.png)
-## Terraform State
-The state for Terraform should live in a stateful place which is central, common, secure and accessible to everything. E.g. Azure Storage is a perfect candidate. You'll need to setup an Azure Storage account with a container. Recommendation would be to apply Azure resource locking on this storage account so that it doesn't get deleted accidentally. Also, maybe apply some tags to this storage account, clearly specifying what it's used for. Edit the **`terraform.tf`** and change the values for **`backend "azurerm"`** to suit your own Azure Storage Account. **`key = "prod.terraform.tfstate"`** the same. 
-
-You can keep **`key = "prod.terraform.tfstate"`** as is, no change.
-``` json
-terraform {
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = ">= 2.68.0" # was 2.46.1
-    }
-  }
-  backend "azurerm" {
-    resource_group_name  = "TerraformState_CloudShell"
-    storage_account_name = "tfstatecloudshell2021"
-    container_name       = "tfstate"
-    key                  = "prod.terraform.tfstate"
-  }
-}
-```
 ## Azure Storage Key
 While the **`terraform.tf`** file has all the other information for the Azure Storage account, one piece is missing, this is the Azure Storage account **key**. This is sensitive! So we use the Azure CLI **environment variables** to help us. 
 ### Azure CLI configuration
@@ -117,7 +103,26 @@ export ARM_ACCESS_KEY=$ACCOUNT_KEY
 Using the **access_key** environment variable in the Azure CLI prevents you from storing the Azure Storage account key on disk, as per:
 
 ![](blobs/Screenshot%202021-08-01%20191743.png)
+## Terraform State
+The state for Terraform should live in a stateful place which is central, common, secure and accessible to everything. E.g. Azure Storage is a perfect candidate. You'll need to setup an Azure Storage account with a container. Recommendation would be to apply Azure resource locking on this storage account so that it doesn't get deleted accidentally. Also, maybe apply some tags to this storage account, clearly specifying what it's used for. Edit the **`terraform.tf`** and change the values for **`backend "azurerm"`** to suit your own Azure Storage Account. **`key = "prod.terraform.tfstate"`** the same. 
 
+You can keep **`key = "prod.terraform.tfstate"`** as is, no change.
+``` json
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = ">= 2.68.0" # was 2.46.1
+    }
+  }
+  backend "azurerm" {
+    resource_group_name  = "TerraformState_CloudShell"
+    storage_account_name = "tfstatecloudshell2021"
+    container_name       = "tfstate"
+    key                  = "prod.terraform.tfstate"
+  }
+}
+```
 ## Variables to change for your deployment
 In the **`variables.tf`** file, there's a list of variables to change to suit your own environment. Make sure you run through this thoroughly and make the necessary changes. It should be fairly obvious which variables you need to change. For starters, one that you definitely would want to change is the Azure Subscription ID:
 
