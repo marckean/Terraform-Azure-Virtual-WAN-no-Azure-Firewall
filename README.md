@@ -67,7 +67,7 @@ shm                                                    65536       0      65536 
 justin@Azure:~$
 ```
 
-There is it: **`//mystoragename.file.core.windows.net/fileshareName`**
+There it is: **`//mystoragename.file.core.windows.net/fileshareName`**
 
 In this instance, the storage account is **mystoragename** and the Azure Files Share is **fileshareName**.
 ## Copy the repo files to the CloudDrive
