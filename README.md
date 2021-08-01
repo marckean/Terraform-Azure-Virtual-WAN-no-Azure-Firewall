@@ -72,8 +72,10 @@ Next thing you need to do is mount the Azure Files Share on your local device, W
 
 Once the Azure Files share is mounted, simply create a folder in the root of the drive and copy the files in this repo to **Azure CloudDrive**. If it's easier, fork this repo so that the files local to your machine. 
 
-## Open this SMB mapped folder in VS Code
-Either open the folder directly from the mapped network drive, or you can use the Azure Storage extension and connect directly to the Azure Files share from within VS Code. 
+## Open Azure CloudDrive folder in VS Code
+Either open the folder directly from the SMB mapped network drive, or you can use the Azure Storage extension and connect directly to the Azure Files share from within VS Code. 
+
+![](blobs/Screenshot%202021-08-01%20214841.png)
 ## Terraform State
 The state for Terraform should live in a stateful place which is central, common, secure and accessible to everything. E.g. Azure Storage is a perfect candidate. You'll need to setup an Azure Storage account with a container. Recommendation would be to apply Azure resource locking on this storage account so that it doesn't get deleted accidentally. Also, maybe apply some tags to this storage account, clearly specifying what it's used for. Edit the **`terraform.tf`** and change the values for **`backend "azurerm"`** to suit your own Azure Storage Account. **`key = "prod.terraform.tfstate"`** the same. 
 
