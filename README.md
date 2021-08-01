@@ -72,7 +72,7 @@ Next thing you need to do is mount the Azure Files Share on your local device, W
 
 Once the Azure Files share is mounted, simply create a folder in the root of the drive and copy the files in this repo to **Azure CloudDrive**. If it's easier, fork this repo so that the files local to your machine. 
 
-## Open Azure CloudDrive folder in VS Code
+## Open Azure CloudDrive in VS Code
 Either open the folder directly from the SMB mapped network drive, or you can use the Azure Storage extension and connect directly to the Azure Files share from within VS Code. 
 
 ![](blobs/Screenshot%202021-08-01%20214841.png)
