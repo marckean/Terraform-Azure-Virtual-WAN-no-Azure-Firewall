@@ -144,7 +144,7 @@ Also create another variable in the **variables.tf** file similar to:
 ![](blobs/Screenshot%202021-07-22%20111659.png)
 
 Now you're done and ready to deploy.
-## Terraform deployment commands in in Azure CLI
+## Terraform deployment commands in Azure CLI
 In the Azure CLI, run **`cd CloudDrive`** - at this point, you're at the same location as what you see in the Azure Files Share that has been mounted.
 
 - Run **`ls`** to view the contents of the folder. 
@@ -157,7 +157,7 @@ When running **`Terraform Init`**, the Azure Storage key is consumed by Terrafor
 
 ![](blobs/Screenshot%202021-08-01%20215459.png)
 
-The file contents looks like:
+The contents of the look like:
 ``` json
 > {
   "version": 4,
