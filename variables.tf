@@ -218,32 +218,3 @@ variable "spoke_subnets_03" {
   }
 }
 
-variable "Connectivity_network_security_group" {
-  description = "(Required) arguments for the Network security group to be created"
-  type        = map(any)
-  default = {
-    one = {
-      name_suffix            = "001"
-      network_security_rules = []
-    }
-    two = {
-      name_suffix            = "002"
-      network_security_rules = []
-    }
-    three = {
-      name_suffix            = "003"
-      network_security_rules = []
-    }
-
-  }
-}
-
-# This has the location to Azure firewall mapping required for the route tables
-variable "route_afw_map" {
-  description = "(Required) Hash map for location names with their Azure firewall ips"
-  type        = map(string)
-  default = {
-    "Firewall1" = "10.54.112.4"
-    "Firewall2" = "10.54.113.132"
-  }
-}
