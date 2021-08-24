@@ -355,4 +355,3 @@ resource "azurerm_express_route_gateway" "ss_vWAN_ER_Gateway" {
     azurerm_virtual_hub.vwan_hubs
   ]
 }
-
