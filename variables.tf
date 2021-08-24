@@ -35,7 +35,7 @@ locals { # management network resource group name
 
 variable "connectivity_subscription_id" {
   type    = string
-  default = "6bx002x5-54x6-4xb1-9xca-5bxefx18x0bx"
+  default = "6bb00255-5486-4db1-96ca-5baefc18b0b2"
 }
 
 #-----------------------------------------------------------------
